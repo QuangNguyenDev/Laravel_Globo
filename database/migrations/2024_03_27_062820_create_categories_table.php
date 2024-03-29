@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('parentId')->nullable();
             $table->string('title', 75);
             $table->string('metaTitle', 100);
             $table->string('slug', 100);
             $table->text('content')->nullable();
             $table->timestamps();
         });
+        Schema::table('categories', function (Blueprint $table) {
+            $table->foreign('parentId')->references('id')->on('categories')->onDelete('cascade');
+        });   
     }
 
     /**

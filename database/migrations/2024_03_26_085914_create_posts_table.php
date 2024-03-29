@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('authorId')->constrained('users')->onDelete('cascade');
-            $table->bigInteger('parentId')->nullable();
+            $table->unsignedBigInteger('authorId');
+            $table->unsignedBigInteger('parentId')->nullable();
             $table->string('title', 75);
             $table->string('metaTitle', 100);
             $table->string('slug', 100);
@@ -22,7 +22,11 @@ return new class extends Migration
             $table->tinyInteger('published');
             $table->timestamps();
             $table->text('content');
-        });
+        });     
+        Schema::table('posts', function (Blueprint $table) {
+            $table->foreign('authorId')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('parentId')->references('id')->on('posts')->onDelete('cascade');
+        });   
     }
 
     /**

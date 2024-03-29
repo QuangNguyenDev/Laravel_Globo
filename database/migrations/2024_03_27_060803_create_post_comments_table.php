@@ -11,16 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_commentssss', function (Blueprint $table) {
+        Schema::create('post_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('postId')->constrained('posts')->onDelete('cascade');
-            $table->foreignId('authorId')->nullable()->constrained('users')->onDelete('set null');
+            $table->unsignedBigInteger('postId');
+            $table->unsignedBigInteger('authorId')->nullable();
+            $table->unsignedBigInteger('parentId')->nullable();
             $table->string('title', 100);
             $table->text('content');
             $table->tinyInteger('published');
             $table->dateTime('createdAt');
             $table->dateTime('updatedAt')->nullable();
         });
+        Schema::table('post_comments', function (Blueprint $table) {
+            $table->foreign('authorId')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('parentId')->references('id')->on('post_comments')->onDelete('cascade');
+            $table->foreign('postId')->references('id')->on('posts')->onDelete('cascade');
+        });   
     }
 
     /**
