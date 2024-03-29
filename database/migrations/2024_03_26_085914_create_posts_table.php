@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('authorId')->constrained('users')->onDelete('cascade');
             $table->bigInteger('parentId')->nullable();
@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('slug', 100);
             $table->tinyText('summary')->nullable();
             $table->tinyInteger('published');
-            $table->dateTime('createdAt');
-            $table->dateTime('updatedAt')->nullable();
+            $table->timestamps();
             $table->text('content');
         });
     }
